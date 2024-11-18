@@ -4,7 +4,7 @@ import OpenAI from "openai";
 import bodyParser from "body-parser";
 
 const app = express();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); // Usa la clave de API desde el archivo .env
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Configuración para recibir JSON en las solicitudes
 app.use(bodyParser.json());
@@ -61,3 +61,4 @@ app.post("/buscar", async (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor iniciado en http://localhost:3000");
 });
+
