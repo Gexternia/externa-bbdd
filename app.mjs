@@ -12,23 +12,16 @@ app.use(bodyParser.json());
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static("public"));
 
-// Variable global para almacenar el ID del hilo (para reutilizar el mismo hilo durante la sesión)
-let threadId = null;
-
 // Ruta principal para realizar la búsqueda
 app.post("/buscar", async (req, res) => {
   try {
     const query = req.body.query;
     console.log("Query recibida:", query); // Monitorea la query enviada
 
-    // Si no existe un hilo, creamos uno nuevo
-    if (!threadId) {
-      const thread = await openai.beta.threads.create();
-      threadId = thread.id;
-      console.log("Nuevo hilo creado con ID:", threadId); // Monitorea la creación de hilos
-    } else {
-      console.log("Usando hilo existente con ID:", threadId);
-    }
+    // Crea un nuevo hilo para cada consulta
+    const thread = await openai.beta.threads.create();
+    const threadId = thread.id;
+    console.log("Nuevo hilo creado con ID:", threadId);
 
     // Envía el mensaje del usuario al asistente
     await openai.beta.threads.messages.create(threadId, {
@@ -61,4 +54,3 @@ app.post("/buscar", async (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor iniciado en http://localhost:3000");
 });
-
